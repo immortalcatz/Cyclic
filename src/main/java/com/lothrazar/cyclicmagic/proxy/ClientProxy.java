@@ -1,10 +1,13 @@
 package com.lothrazar.cyclicmagic.proxy;
 
 import java.util.ArrayList;
+import org.lwjgl.opengl.GL11;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import com.lothrazar.cyclicmagic.ItemRegistry;
 import com.lothrazar.cyclicmagic.Const;
 import com.lothrazar.cyclicmagic.gui.GuiSpellbook;
@@ -25,6 +28,17 @@ import net.minecraft.entity.EntityList;
 
 public class ClientProxy extends CommonProxy{
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void spawnParticle(World world, EnumParticleTypes sparkle, double x, double y, double z, int count){
+		
+		GL11.glColor3f(111, 0, 0);
+		
+		for(int countparticles = 0; countparticles <= count; ++countparticles){
+			world.spawnParticle(sparkle, x + (world.rand.nextDouble() - 0.5D) * (double) 0.8, y + world.rand.nextDouble() * (double) 1.5 - (double) 0.1, z + (world.rand.nextDouble() - 0.5D) * (double) 0.8, 0.0D, 0.0D, 0.0D);
+		}
+	}
+	
 	@Override
 	public void register(){
 
