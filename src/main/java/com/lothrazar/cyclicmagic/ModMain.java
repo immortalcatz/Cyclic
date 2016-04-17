@@ -1,14 +1,12 @@
 package com.lothrazar.cyclicmagic;
 
 import org.apache.logging.log4j.Logger;
-import com.lothrazar.cyclicmagic.event.EventExtendedInventory;
 import com.lothrazar.cyclicmagic.gui.GuiHandler;
 import com.lothrazar.cyclicmagic.proxy.CommonProxy;
 import com.lothrazar.cyclicmagic.registry.*;
 import com.lothrazar.cyclicmagic.util.Const;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -132,7 +130,6 @@ public class ModMain {
 
 	/* TODO LIST
 	 * 
-	 * SHOW IButtons in horse invo
 	 * 
 	 * 
 	 * ROTATE: STAIRS: allow switch frop top to bottom

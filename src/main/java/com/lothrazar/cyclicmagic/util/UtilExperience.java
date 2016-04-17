@@ -19,7 +19,7 @@ public class UtilExperience {
 		return totalExp;
 	}
 
-	public static boolean drainExp(EntityPlayer player, float f) {
+	public static boolean drainExp(EntityPlayer player, double f) {
 
 		double totalExp = getExpTotal(player);
 
