@@ -37,7 +37,7 @@ public class EventExtendedInventory implements IHasConfig{
 		}
 	}
 
-	public static void syncBaubles(EntityPlayer player) {
+	public static void sync(EntityPlayer player) {
 		int size = InventoryPlayerExtended.ICOL*InventoryPlayerExtended.IROW;
 		for (int a = 0; a < size; a++) {
 			UtilPlayerInventoryFilestorage.getPlayerInventory(player).syncSlotToClients(a);
@@ -52,7 +52,7 @@ public class EventExtendedInventory implements IHasConfig{
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 
 			if (!playerEntityIds.isEmpty() && playerEntityIds.contains(player.getEntityId())) {
-				syncBaubles(player);
+				sync(player);
 				playerEntityIds.remove(player.getEntityId());
 			}
 		}

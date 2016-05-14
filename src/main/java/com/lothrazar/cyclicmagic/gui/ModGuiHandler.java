@@ -1,7 +1,10 @@
 package com.lothrazar.cyclicmagic.gui;
 
 import com.lothrazar.cyclicmagic.block.tileentity.TileEntityUncrafting;
+import com.lothrazar.cyclicmagic.gui.player.ContainerPlayerExtended;
+import com.lothrazar.cyclicmagic.gui.player.ContainerPlayerWaypoints;
 import com.lothrazar.cyclicmagic.gui.player.GuiPlayerExtended;
+import com.lothrazar.cyclicmagic.gui.player.GuiPlayerWaypoints;
 import com.lothrazar.cyclicmagic.gui.storage.ContainerStorage;
 import com.lothrazar.cyclicmagic.gui.storage.GuiStorage;
 import com.lothrazar.cyclicmagic.gui.storage.InventoryStorage;
@@ -23,17 +26,18 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class ModGuiHandler implements IGuiHandler {
 
-	public static final int	GUI_INDEX_UNCRAFTING	= 0;
-	public static final int	GUI_INDEX_WAND				= 1;
-	public static final int	GUI_INDEX_EXTENDED		= 2;
-	public static final int	GUI_INDEX_STORAGE			= 3;
+	public static final int	GUI_INDEX_UNCRAFTING= 0;
+	public static final int	GUI_INDEX_WAND		= 1;
+	public static final int	GUI_INDEX_EXTENDED  = 2;
+	public static final int	GUI_INDEX_STORAGE	= 3;
+	public static final int GUI_INDEX_WAYPOINTS = 4;
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
 		switch (ID) {
 		case GUI_INDEX_EXTENDED:
-			return new com.lothrazar.cyclicmagic.gui.player.ContainerPlayerExtended(player.inventory, !world.isRemote, player);
+			return new ContainerPlayerExtended(player.inventory, !world.isRemote, player);
 
 		case GUI_INDEX_WAND:
 			ItemStack wand = UtilSpellCaster.getPlayerWandIfHeld(player);
@@ -48,6 +52,10 @@ public class ModGuiHandler implements IGuiHandler {
 			ItemStack s = UtilInventory.getPlayerItemIfHeld(player);
 
 			return new ContainerStorage(player, player.inventory, new InventoryStorage(player, s));
+		case GUI_INDEX_WAYPOINTS:
+	 
+			return new ContainerPlayerWaypoints(player.inventory, world);
+		
 		}
 		return null;
 	}
@@ -75,6 +83,8 @@ public class ModGuiHandler implements IGuiHandler {
 
 				return new GuiStorage(new ContainerStorage(player, player.inventory, new InventoryStorage(player, s)), s);
 
+			case GUI_INDEX_WAYPOINTS:
+				return new GuiPlayerWaypoints(player);
 			}
 		return null;
 	}

@@ -21,6 +21,7 @@ import com.lothrazar.cyclicmagic.net.PacketDeleteButton;
 import com.lothrazar.cyclicmagic.net.PacketNewButton;
 import com.lothrazar.cyclicmagic.net.PacketOpenExtendedInventory;
 import com.lothrazar.cyclicmagic.net.PacketOpenNormalInventory;
+import com.lothrazar.cyclicmagic.net.PacketPlayerWaypoints;
 import com.lothrazar.cyclicmagic.net.PacketSyncExtendedInventory;
 import com.lothrazar.cyclicmagic.net.PacketWarpButton;
 import com.lothrazar.cyclicmagic.net.QuickStackPacket;
@@ -76,6 +77,8 @@ public class PacketRegistry {
 		network.registerMessage(OpenCraftingPacket.class, OpenCraftingPacket.class, OpenCraftingPacket.ID, Side.SERVER);
 
 		network.registerMessage(PacketBuildSize.class, PacketBuildSize.class, PacketBuildSize.ID, Side.SERVER);
+		network.registerMessage(PacketPlayerWaypoints.class, PacketPlayerWaypoints.class, PacketPlayerWaypoints.ID, Side.SERVER);
 
+		
 	}
 }
