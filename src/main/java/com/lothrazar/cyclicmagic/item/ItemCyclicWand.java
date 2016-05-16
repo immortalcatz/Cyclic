@@ -2,6 +2,7 @@ package com.lothrazar.cyclicmagic.item;
 
 import java.util.List;
 
+import com.lothrazar.cyclicmagic.ICanRegister;
 import com.lothrazar.cyclicmagic.registry.SpellRegistry;
 import com.lothrazar.cyclicmagic.spell.BaseSpellRange;
 import com.lothrazar.cyclicmagic.spell.ISpell;
@@ -25,11 +26,10 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCyclicWand extends Item {
+public class ItemCyclicWand extends BaseItem {
 
 	private static final String NBT_SPELLCURRENT = "spell_id";
-	private List<ISpell> spellbook;
-	public static boolean						sceptersEnabled;
+	private List<ISpell> spellbook; 
 
 	public ItemCyclicWand() {
 
@@ -430,12 +430,12 @@ public class ItemCyclicWand extends Item {
 
 		config.setCategoryComment(category, "Disable or customize items added to the game");
 
-		sceptersEnabled = config.getBoolean("sceptersEnabled", category, true, "Enable the building scepters");
+		//sceptersEnabled = config.getBoolean("sceptersEnabled", category, true, "Enable the building scepters");
 
 		SpellRegistry.renderOnLeft = config.getBoolean("scepter_HUD_left", category, true, "True for top left of the screen, false for top right");
 
 		BaseSpellRange.maxRange = config.getInt("scepter_MaxRange", category, 64, 8, 128, "Maximum range for all spells");
 
 		
-	}
+	} 
 }

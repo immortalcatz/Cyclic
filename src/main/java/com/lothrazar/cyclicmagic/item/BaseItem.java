@@ -1,37 +1,27 @@
 package com.lothrazar.cyclicmagic.item;
 
+import com.lothrazar.cyclicmagic.ICanRegister;
 import com.lothrazar.cyclicmagic.ModMain;
+import com.lothrazar.cyclicmagic.registry.ItemRegistry;
 import com.lothrazar.cyclicmagic.util.Const;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BaseItem extends Item{
+public  class BaseItem extends Item implements ICanRegister{
+  
+	private boolean isEnabled = true;
 
-	private String rawName;
-	private boolean hideFromCreativeTab = false;
-
-	public BaseItem setRawName(String s){
-		this.rawName = s;
-		return this;
-	}
-	public BaseItem setHidden(){
-		this.hideFromCreativeTab = true;
-		return this;
-	}
-	public String getRawName() {
-		return rawName;
-	}
-
-	public void register(){
-		
-		this.setUnlocalizedName(getRawName());
-		
-		GameRegistry.register(this, new ResourceLocation(Const.MODID, getRawName()));
-
-		if (hideFromCreativeTab == false) {
-			this.setCreativeTab(ModMain.TAB);
+	@Override
+	public void tryRegister(String rawName){
+		if(this.isEnabled){
+			ModMain.itemRegistry.registerItem(this, rawName);
 		}
 	}
+	 
+	@Override
+	public void setEnabled(boolean e) {
+		this.isEnabled = e;
+	} 
 }

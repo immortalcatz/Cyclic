@@ -3,6 +3,7 @@ package com.lothrazar.cyclicmagic.item;
 import java.util.List;
 
 import com.lothrazar.cyclicmagic.IHasRecipe;
+import com.lothrazar.cyclicmagic.ModMain;
 import com.lothrazar.cyclicmagic.registry.ItemRegistry;
 import com.lothrazar.cyclicmagic.registry.ReflectionRegistry;
 import com.lothrazar.cyclicmagic.util.Const;
@@ -79,7 +80,7 @@ public class ItemFoodHorse extends BaseItem implements IHasRecipe {
 		 */
 		
 		//TODO: USE AN EnumType flag passed by constructor, if u dont want to do new classes
-		if (held.getItem() == ItemRegistry.itemMap.get("emeraldCarrot")) {
+		if (held.getItem() == ModMain.itemRegistry.itemMap.get("emeraldCarrot")) {
 			switch (horse.getType()) {
 			case HORSE:
 				horse.setType(HorseArmorType.ZOMBIE);
@@ -102,7 +103,7 @@ public class ItemFoodHorse extends BaseItem implements IHasRecipe {
 			break;
 			}
 		}
-		else if (held.getItem() == ItemRegistry.itemMap.get("lapisCarrot")) {
+		else if (held.getItem() == ModMain.itemRegistry.itemMap.get("lapisCarrot")) {
 			int var = horse.getHorseVariant();
 			int var_reduced = 0;
 			int var_new = 0;
@@ -143,7 +144,7 @@ public class ItemFoodHorse extends BaseItem implements IHasRecipe {
 
 			success = true;
 		}
-		else if (held.getItem() == ItemRegistry.itemMap.get("diamondCarrot")) {
+		else if (held.getItem() == ModMain.itemRegistry.itemMap.get("diamondCarrot")) {
 			float mh = (float) horse.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
 
 			if (mh < 2 * HEARTS_MAX) // 20 hearts == 40 health points
@@ -153,7 +154,7 @@ public class ItemFoodHorse extends BaseItem implements IHasRecipe {
 				success = true;
 			}
 		}
-		else if (held.getItem() == ItemRegistry.itemMap.get("horse_upgrade_jump")) {
+		else if (held.getItem() == ModMain.itemRegistry.itemMap.get("horse_upgrade_jump")) {
 			if (ReflectionRegistry.horseJumpStrength != null)// only happpens if mod
 			                                                 // installing preInit
 			// method fails to find it
@@ -171,7 +172,7 @@ public class ItemFoodHorse extends BaseItem implements IHasRecipe {
 				}
 			}
 		}
-		else if (held.getItem() == ItemRegistry.itemMap.get("horse_upgrade_speed")) {
+		else if (held.getItem() == ModMain.itemRegistry.itemMap.get("horse_upgrade_speed")) {
 			double speed = horse.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
 
 			double newSpeed = speed * SPEED_SCALE;

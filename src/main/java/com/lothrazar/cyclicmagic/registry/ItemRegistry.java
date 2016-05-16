@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lothrazar.cyclicmagic.ICanRegister;
 import com.lothrazar.cyclicmagic.IHasConfig;
 import com.lothrazar.cyclicmagic.IHasRecipe;
 import com.lothrazar.cyclicmagic.ModMain;
@@ -54,8 +55,175 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemRegistry {
-	public static ArrayList<Item> items	= new ArrayList<Item>();
-	public static Map<String,Item> itemMap	= new HashMap<String,Item>();
+	//public ArrayList<Item> items	= new ArrayList<Item>();
+	public Map<String,Item> itemMap	= new HashMap<String,Item>();
+	
+	public ItemRegistry(){
+
+		addItem(new ItemEnderPearlReuse(),"ender_pearl_reuse"); 
+		 
+		addItem(new ItemPaperCarbon(),"carbon_paper"); 
+		
+		addItem(new ItemToolHarvest(),"tool_harvest");
+		addItem(new ItemToolPull(),"tool_pull");
+		addItem(new ItemToolPush(),"tool_push");
+		addItem(new ItemToolRotate(),"tool_rotate");
+		addItem(new ItemInventoryStorage(),"storage_bag");
+		ItemChestSack chest_sack = new ItemChestSack();
+		chest_sack.setHidden();
+		addItem(chest_sack,"chest_sack");
+		addItem(new ItemChestSackEmpty(),"chest_sack_empty");
+		addItem(new ItemProjectileBlaze(),"ender_blaze");
+		addItem(new ItemProjectileDungeon(),"ender_dungeon");
+		addItem(new ItemProjectileFishing(),"ender_fishing");
+		addItem(new ItemProjectileWool(),"ender_wool");
+		addItem(new ItemProjectileTorch(),"ender_torch");
+		addItem(new ItemProjectileWater(),"ender_water");
+		addItem(new ItemProjectileSnow(),"ender_snow");
+		addItem(new ItemProjectileHarvest(),"ender_harvest");
+		addItem(new ItemProjectileLightning(),"ender_lightning");
+		addItem(new ItemProjectileTNT(1),"ender_tnt_1");
+		addItem(new ItemProjectileTNT(2),"ender_tnt_2");
+		addItem(new ItemProjectileTNT(3),"ender_tnt_4");
+		addItem(new ItemProjectileTNT(4),"ender_tnt_6");
+		addItem(new ItemFoodHorse(new ItemStack(Items.emerald)),"horse_upgrade_type");
+		addItem(new ItemFoodHorse(new ItemStack(Items.dye, 1, Const.dye_lapis)),"horse_upgrade_variant");
+		addItem(new ItemFoodHorse(new ItemStack(Items.diamond)),"horse_upgrade_health");
+		addItem(new ItemFoodHorse(new ItemStack(Items.redstone)),"horse_upgrade_speed");
+		addItem(new ItemFoodHorse(new ItemStack(Items.ender_eye)),"horse_upgrade_jump");
+		addItem(new ItemEnderBook(),"book_ender"); 
+  
+		//if (ItemCyclicWand.sceptersEnabled) {
+
+			ItemCyclicWand cyclic_wand_build = new ItemCyclicWand();
+			addItem(cyclic_wand_build, "cyclic_wand_build");
+			
+			//GameRegistry.addRecipe(new ItemStack(cyclic_wand_build), "sds", " o ", "gog", 'd', new ItemStack(Blocks.diamond_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
+
+			ItemCyclicWand cyclic_wand_range = new ItemCyclicWand();
+			addItem(cyclic_wand_range, "cyclic_wand_range");
+			//GameRegistry.addRecipe(new ItemStack(cyclic_wand_range), "sds", " o ", "gog", 'd', new ItemStack(Blocks.emerald_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
+
+			ItemCyclicWand cyclic_wand_fly = new ItemCyclicWand();
+			addItem(cyclic_wand_fly, "cyclic_wand_fly");
+			//GameRegistry.addRecipe(new ItemStack(cyclic_wand_fly), "sds", " o ", "gog", 'd', new ItemStack(Blocks.redstone_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
+		//}
+
+		// thanks for help:
+		// http://bedrockminer.jimdo.com/modding-tutorials/basic-modding-1-7/custom-tools-swords/
+
+		
+		
+		if (emeraldGearEnabled) {
+
+			Item emerald_sword = new ItemEmeraldSword();
+			addItem(emerald_sword, ItemEmeraldSword.name);
+
+			Item emerald_pickaxe = new ItemEmeraldPickaxe();
+			addItem(emerald_pickaxe, ItemEmeraldPickaxe.name);
+
+			Item emerald_axe = new ItemEmeraldAxe();
+			addItem(emerald_axe, ItemEmeraldAxe.name);
+
+			Item emerald_spade = new ItemEmeraldSpade();
+			addItem(emerald_spade, ItemEmeraldSpade.name);
+
+			Item emerald_hoe = new ItemEmeraldHoe();
+			addItem(emerald_hoe, ItemEmeraldHoe.name);
+
+			// ..yeah.. kind of breaks the pattern. i could make one class for each i
+			// guess.
+			Item emerald_helmet = new ItemEmeraldArmor(EntityEquipmentSlot.HEAD);
+			addItem(emerald_helmet, "emerald_helmet");
+
+			Item emerald_chestplate = new ItemEmeraldArmor(EntityEquipmentSlot.CHEST);
+			addItem(emerald_chestplate, "emerald_chestplate");
+
+			Item emerald_leggings = new ItemEmeraldArmor(EntityEquipmentSlot.LEGS);
+			addItem(emerald_leggings, "emerald_leggings");
+
+			Item emerald_boots = new ItemEmeraldArmor(EntityEquipmentSlot.FEET);
+			addItem(emerald_boots, "emerald_boots"); 
+		}
+ 
+
+		int I = PotionRegistry.I;
+		int II = PotionRegistry.II;
+	////	int III = PotionRegistry.III;
+	//	int IV = PotionRegistry.IV;
+		int V = PotionRegistry.V;
+
+
+		 
+		final int hunger		= 4;
+		final int time			= 8 * 60; // 8:00
+		
+		if (ItemFoodAppleMagic.apple_chorus_enabled) {
+			ItemFoodAppleMagic apple_chorus = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.chorus_fruit)
+					,MobEffects.levitation, 30, I);
+ 
+			addItem(apple_chorus, "apple_chorus");
+		}
+
+		if (ItemFoodAppleMagic.apple_ender_enabled) {
+			ItemFoodAppleMagic apple_ender = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.ender_pearl)
+					,PotionRegistry.ender, time, I);
+			addItem(apple_ender, "apple_ender");
+		}
+
+		if (ItemFoodAppleMagic.apple_emerald_enabled) {
+			ItemFoodAppleMagic apple_emerald = new ItemFoodAppleMagic(hunger, false, 
+					new ItemStack(Items.emerald),MobEffects.healthBoost, time, V);
+			
+			addItem(apple_emerald, "apple_emerald"); 
+		}
+
+		if (ItemFoodAppleMagic.apple_chocolate_enabled) {
+			ItemFoodAppleMagic apple_chocolate = new ItemFoodAppleMagic(hunger, false, 
+					new ItemStack(Items.dye, 1, Const.dye_cocoa),MobEffects.luck, time, II);
+			addItem(apple_chocolate, "apple_chocolate"); 
+		}
+
+		if (ItemFoodAppleMagic.apple_lapis_enabled) {
+			ItemFoodAppleMagic apple_lapis = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.dye, 1, Const.dye_lapis)
+					,MobEffects.digSpeed, time, II); // Haste
+			addItem(apple_lapis, "apple_lapis"); 
+		}
+		
+		if (ItemFoodAppleMagic.apple_diamond_enabled) {
+			ItemFoodAppleMagic apple_diamond = new ItemFoodAppleMagic(hunger, false, 
+					new ItemStack(Items.diamond),MobEffects.resistance, time, I);
+			
+			addItem(apple_diamond, "apple_diamond");
+		}
+
+		if (ItemFoodAppleMagic.apple_bone_enabled) {
+			ItemFoodAppleMagic apple_bone = new ItemFoodAppleMagic(hunger, false, 
+					new ItemStack(Items.bone),MobEffects.glowing, time, I);
+			addItem(apple_bone, "apple_bone");
+		}
+
+		if (ItemFoodAppleMagic.apple_netherwart_enabled) {
+			ItemFoodAppleMagic apple_netherwart = new ItemFoodAppleMagic(hunger, false, 
+					new ItemStack(Items.nether_wart),PotionRegistry.magnet, time, I);
+			
+			addItem(apple_netherwart, "apple_netherwart");
+		}
+
+		if (ItemFoodAppleMagic.apple_prismarine_enabled) {
+			ItemFoodAppleMagic apple_prismarine = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.prismarine_shard),
+					PotionRegistry.waterwalk, time, I); 
+			
+			addItem(apple_prismarine, "apple_prismarine");
+		}
+
+		if (ItemFoodAppleMagic.apple_clownfish_enabled) {
+			ItemFoodAppleMagic apple_slowfall = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.fish, 1, Const.clownfish)
+					,PotionRegistry.slowfall, time, I);
+			
+			addItem(apple_slowfall, "apple_slowfall");
+		} 
+	}
 	
 	private static boolean emeraldGearEnabled ; 
 	public static ToolMaterial		MATERIAL_EMERALD;
@@ -66,9 +234,11 @@ public class ItemRegistry {
 	private static final int		diamondDurability				= 33;
 	private static final int[]	diamondreductionAmounts	= new int[] { 3, 6, 8, 3 };
  
-	public static void syncConfig(Configuration config) {
+	public void syncConfig(Configuration config) {
 		Property prop;
-		for (Item item : items) {
+		Item item;
+		for (String key : itemMap.keySet()) {
+			item = itemMap.get(key);
 			if (item instanceof IHasConfig) {
 				((IHasConfig) item).syncConfig(config);
 			}
@@ -86,193 +256,36 @@ public class ItemRegistry {
 		ItemFoodAppleMagic.syncConfig(config);
 	}
 	
-	private static void registerRecipes() {
+	private void registerRecipes() {
 
-		for (Item item : items) {
+		Item item;
+		for (String key : itemMap.keySet()) {
+			item = itemMap.get(key);
 			if (item instanceof IHasRecipe) {
 				((IHasRecipe) item).addRecipe();
 			}
 		}
 	}
 
-	public static void register() {
+	public void register() {
 		registerMaterials();
 		
-		addItem(new ItemEnderPearlReuse().setRawName("ender_pearl_reuse")); 
-		addItem(new ItemPaperCarbon().setRawName("carbon_paper")); 
-		addItem(new ItemToolHarvest().setRawName("tool_harvest"));
-		addItem(new ItemToolPull().setRawName("tool_pull"));
-		addItem(new ItemToolPush().setRawName("tool_push"));
-		addItem(new ItemToolRotate().setRawName("tool_rotate"));
-		addItem(new ItemInventoryStorage().setRawName("storage_bag"));
-		addItem(new ItemChestSack().setRawName("chest_sack").setHidden());
-		addItem(new ItemChestSackEmpty().setRawName("chest_sack_empty"));
-		addItem(new ItemProjectileBlaze().setRawName("ender_blaze"));
-		addItem(new ItemProjectileDungeon().setRawName("ender_dungeon"));
-		addItem(new ItemProjectileFishing().setRawName("ender_fishing"));
-		addItem(new ItemProjectileWool().setRawName("ender_wool"));
-		addItem(new ItemProjectileTorch().setRawName("ender_torch"));
-		addItem(new ItemProjectileWater().setRawName("ender_water"));
-		addItem(new ItemProjectileSnow().setRawName("ender_snow"));
-		addItem(new ItemProjectileHarvest().setRawName("ender_harvest"));
-		addItem(new ItemProjectileLightning().setRawName("ender_lightning"));
-		addItem(new ItemProjectileTNT(1).setRawName("ender_tnt_1"));
-		addItem(new ItemProjectileTNT(2).setRawName("ender_tnt_2"));
-		addItem(new ItemProjectileTNT(3).setRawName("ender_tnt_4"));
-		addItem(new ItemProjectileTNT(4).setRawName("ender_tnt_6"));
-		addItem(new ItemFoodHorse(new ItemStack(Items.emerald)).setRawName("horse_upgrade_type"));
-		addItem(new ItemFoodHorse(new ItemStack(Items.dye, 1, Const.dye_lapis)).setRawName("horse_upgrade_variant"));
-		addItem(new ItemFoodHorse(new ItemStack(Items.diamond)).setRawName("horse_upgrade_health"));
-		addItem(new ItemFoodHorse(new ItemStack(Items.redstone)).setRawName("horse_upgrade_speed"));
-		addItem(new ItemFoodHorse(new ItemStack(Items.ender_eye)).setRawName("horse_upgrade_jump"));
-  
-		//only some need static references
-		addItem(new ItemEnderBook().setRawName("book_ender")); 
- 
-		//maybe one day it will be all base items
-		for (Item item : items) { 
-			if (item instanceof BaseItem) {
-				((BaseItem) item).register();
+		Item item;
+		for (String key : itemMap.keySet()) {
+			item = itemMap.get(key);
+			if(item instanceof ICanRegister){
+				((ICanRegister)item).tryRegister(key);
 			}
-//			else{
-//				System.out.println("WARN: unregistered item"+item.getClass()); 
-//				//registerItem(item);//NAME??
-//			}
+			else{
+				registerItem(item,key);
+			}
 		}
-
-
-		if (ItemCyclicWand.sceptersEnabled) {
-
-			ItemCyclicWand cyclic_wand_build = new ItemCyclicWand();
-			registerItem(cyclic_wand_build, "cyclic_wand_build");
-			GameRegistry.addRecipe(new ItemStack(cyclic_wand_build), "sds", " o ", "gog", 'd', new ItemStack(Blocks.diamond_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
-
-			ItemCyclicWand cyclic_wand_range = new ItemCyclicWand();
-			registerItem(cyclic_wand_range, "cyclic_wand_range");
-			GameRegistry.addRecipe(new ItemStack(cyclic_wand_range), "sds", " o ", "gog", 'd', new ItemStack(Blocks.emerald_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
-
-			ItemCyclicWand cyclic_wand_fly = new ItemCyclicWand();
-			registerItem(cyclic_wand_fly, "cyclic_wand_fly");
-			GameRegistry.addRecipe(new ItemStack(cyclic_wand_fly), "sds", " o ", "gog", 'd', new ItemStack(Blocks.redstone_block), 'g', Items.ghast_tear, 'o', Blocks.obsidian, 's', Items.nether_star);
-		}
-
-		// thanks for help:
-		// http://bedrockminer.jimdo.com/modding-tutorials/basic-modding-1-7/custom-tools-swords/
-
 		
-		
-		if (emeraldGearEnabled) {
-
-			Item emerald_sword = new ItemEmeraldSword();
-			registerItem(emerald_sword, ItemEmeraldSword.name);
-
-			Item emerald_pickaxe = new ItemEmeraldPickaxe();
-			registerItem(emerald_pickaxe, ItemEmeraldPickaxe.name);
-
-			Item emerald_axe = new ItemEmeraldAxe();
-			registerItem(emerald_axe, ItemEmeraldAxe.name);
-
-			Item emerald_spade = new ItemEmeraldSpade();
-			registerItem(emerald_spade, ItemEmeraldSpade.name);
-
-			Item emerald_hoe = new ItemEmeraldHoe();
-			registerItem(emerald_hoe, ItemEmeraldHoe.name);
-
-			// ..yeah.. kind of breaks the pattern. i could make one class for each i
-			// guess.
-			Item emerald_helmet = new ItemEmeraldArmor(EntityEquipmentSlot.HEAD);
-			registerItem(emerald_helmet, "emerald_helmet");
-
-			Item emerald_chestplate = new ItemEmeraldArmor(EntityEquipmentSlot.CHEST);
-			registerItem(emerald_chestplate, "emerald_chestplate");
-
-			Item emerald_leggings = new ItemEmeraldArmor(EntityEquipmentSlot.LEGS);
-			registerItem(emerald_leggings, "emerald_leggings");
-
-			Item emerald_boots = new ItemEmeraldArmor(EntityEquipmentSlot.FEET);
-			registerItem(emerald_boots, "emerald_boots");
-
-		}
- 
-
-		int I = PotionRegistry.I;
-		int II = PotionRegistry.II;
-	////	int III = PotionRegistry.III;
-	//	int IV = PotionRegistry.IV;
-		int V = PotionRegistry.V;
-
-
 		 
-		final int hunger		= 4;
-		final int time			= 8 * 60; // 8:00
-		
-		if (ItemFoodAppleMagic.apple_chorus_enabled) {
-			ItemFoodAppleMagic apple_chorus = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.chorus_fruit));
-
-			apple_chorus.addEffect(MobEffects.levitation, 30, I);
-			ItemRegistry.registerItem(apple_chorus, "apple_chorus");
-		}
-
-		if (ItemFoodAppleMagic.apple_ender_enabled) {
-			ItemFoodAppleMagic apple_ender = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.ender_pearl));
-
-			apple_ender.addEffect(PotionRegistry.ender, time, I);
-			ItemRegistry.registerItem(apple_ender, "apple_ender");
-		}
-
-		if (ItemFoodAppleMagic.apple_emerald_enabled) {
-			ItemFoodAppleMagic apple_emerald = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.emerald));
-		
-			apple_emerald.addEffect(MobEffects.healthBoost, time, V);
-			ItemRegistry.registerItem(apple_emerald, "apple_emerald"); 
-		}
-
-		if (ItemFoodAppleMagic.apple_chocolate_enabled) {
-			ItemFoodAppleMagic apple_chocolate = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.dye, 1, Const.dye_cocoa));
-			apple_chocolate.addEffect(MobEffects.luck, time, II);
-			ItemRegistry.registerItem(apple_chocolate, "apple_chocolate"); 
-		}
-
-		if (ItemFoodAppleMagic.apple_lapis_enabled) {
-			ItemFoodAppleMagic apple_lapis = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.dye, 1, Const.dye_lapis));
-			apple_lapis.addEffect(MobEffects.digSpeed, time, II); // Haste
-			ItemRegistry.registerItem(apple_lapis, "apple_lapis"); 
-		}
-		
-		if (ItemFoodAppleMagic.apple_diamond_enabled) {
-			ItemFoodAppleMagic apple_diamond = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.diamond),true);
-			ItemRegistry.registerItem(apple_diamond, "apple_diamond");
-			apple_diamond.addEffect(MobEffects.resistance, time, I);
-		}
-
-		if (ItemFoodAppleMagic.apple_bone_enabled) {
-			ItemFoodAppleMagic apple_bone = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.bone));
-			ItemRegistry.registerItem(apple_bone, "apple_bone");
-			apple_bone.addEffect(MobEffects.glowing, time, I);
-		}
-
-		if (ItemFoodAppleMagic.apple_netherwart_enabled) {
-			ItemFoodAppleMagic apple_netherwart = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.nether_wart));
-			ItemRegistry.registerItem(apple_netherwart, "apple_netherwart");
-			apple_netherwart.addEffect(PotionRegistry.magnet, time, I);
-		}
-
-		if (ItemFoodAppleMagic.apple_prismarine_enabled) {
-			ItemFoodAppleMagic apple_prismarine = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.prismarine_shard));
-			ItemRegistry.registerItem(apple_prismarine, "apple_prismarine");
-			apple_prismarine.addEffect(PotionRegistry.waterwalk, time, I); 
-		}
-
-		if (ItemFoodAppleMagic.apple_clownfish_enabled) {
-			ItemFoodAppleMagic apple_slowfall = new ItemFoodAppleMagic(hunger, false, new ItemStack(Items.fish, 1, Const.clownfish));
-			ItemRegistry.registerItem(apple_slowfall, "apple_slowfall");
-			apple_slowfall.addEffect(PotionRegistry.slowfall, time, I);
-		}
-
 		registerRecipes();
 	}
 
-	private static void registerMaterials() {
+	private void registerMaterials() {
 
 		ARMOR_MATERIAL_EMERALD = EnumHelper.addArmorMaterial("emerald", Const.MODID + ":emerald", diamondDurability, diamondreductionAmounts, ArmorMaterial.DIAMOND.getEnchantability(), ArmorMaterial.DIAMOND.getSoundEvent());
 
@@ -283,17 +296,17 @@ public class ItemRegistry {
 		// 1600,3.5F, 5+25 );
 
 	}
-
-	private static void addItem(BaseItem i){
+ 
+	private void addItem(Item i, String name){
 		items.add(i);
-		itemMap.put(i.getRawName(), i);
+		itemMap.put(name, i);
 	}
 	 
-	public static void registerItem(Item item, String name) {
+	public void registerItem(Item item, String name) {
 		registerItem(item, name, false);// default is not hidden
 	}
 
-	public static void registerItem(Item item, String name, boolean isHidden) {
+	public void registerItem(Item item, String name, boolean isHidden) {
 
 		item.setUnlocalizedName(name);
 

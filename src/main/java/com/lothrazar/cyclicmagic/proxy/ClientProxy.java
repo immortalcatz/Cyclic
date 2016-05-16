@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Ordering;
+import com.lothrazar.cyclicmagic.ModMain;
 import com.lothrazar.cyclicmagic.entity.projectile.EntityBlazeBolt;
 import com.lothrazar.cyclicmagic.entity.projectile.EntityDungeonEye;
 import com.lothrazar.cyclicmagic.entity.projectile.EntityDynamite;
@@ -192,17 +193,18 @@ public class ClientProxy extends CommonProxy {
 		// ItemRegistry.soulstone,
 		// Minecraft.getMinecraft().getRenderItem()));
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityLightningballBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_lightning"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityHarvestBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_harvest"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityWaterBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_water"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySnowballBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_snow"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityTorchBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_torch"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFishingBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_fishing"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityShearingBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_wool"), ri));
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityLightningballBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_lightning"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityHarvestBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_harvest"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityWaterBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_water"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySnowballBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_snow"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTorchBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_torch"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishingBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_fishing"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityShearingBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_wool"), ri));
 		//RenderingRegistry.registerEntityRenderingHandler(EntityHomeBolt.class, new RenderSnowball(rm, ItemRegistry.ModItems.ender_bed, ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDungeonEye.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_dungeon"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_tnt_1"), ri));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBlazeBolt.class, new RenderSnowball(rm, ItemRegistry.itemMap.get("ender_blaze"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDungeonEye.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_dungeon"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_tnt_1"), ri));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlazeBolt.class, new RenderSnowball(rm, ModMain.itemRegistry.itemMap.get("ender_blaze"), ri));
 
 	}
 
@@ -293,7 +295,7 @@ public class ClientProxy extends CommonProxy {
 			mesher.register(item, 0, new ModelResourceLocation(name, "inventory"));
 		}
 
-		for (Item i : ItemRegistry.items) {
+		for (Item i : ModMain.itemRegistry.items) {
 			name = Const.MODRES + i.getUnlocalizedName().replaceAll("item.", "");
 
 			mesher.register(i, 0, new ModelResourceLocation(name, "inventory"));

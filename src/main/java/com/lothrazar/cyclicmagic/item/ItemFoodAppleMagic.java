@@ -3,6 +3,8 @@ package com.lothrazar.cyclicmagic.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lothrazar.cyclicmagic.ICanRegister;
+import com.lothrazar.cyclicmagic.IHasConfig;
 import com.lothrazar.cyclicmagic.IHasRecipe;
 import com.lothrazar.cyclicmagic.ModMain;
 import com.lothrazar.cyclicmagic.registry.PotionRegistry;
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemFoodAppleMagic extends ItemFood implements IHasRecipe {
+public class ItemFoodAppleMagic extends ItemFood implements IHasRecipe, IHasConfig, ICanRegister {
 	private boolean							hasEffect	= false;
 	private ArrayList<Potion>		potions;
 	private ArrayList<Integer>	potionDurations;
@@ -44,8 +46,11 @@ public class ItemFoodAppleMagic extends ItemFood implements IHasRecipe {
 	
 	private boolean givesHearts = false;
 
-	public ItemFoodAppleMagic(int fillsHunger, boolean has_effect, ItemStack rec) {
+	public ItemFoodAppleMagic(int fillsHunger, boolean has_effect, ItemStack rec
+			,Potion potionId, int potionDuration, int potionAmplifier) {
 		this(fillsHunger,has_effect,rec,false);
+		
+		this.addEffect(potionId, potionDuration, potionAmplifier);
 	}
 	
 	public ItemFoodAppleMagic(int fillsHunger, boolean has_effect, ItemStack rec, boolean hearts) {
@@ -62,13 +67,13 @@ public class ItemFoodAppleMagic extends ItemFood implements IHasRecipe {
 	}
 	
 
-	public ItemFoodAppleMagic addEffect(Potion potionId, int potionDuration, int potionAmplifier) {
+	private void addEffect(Potion potionId, int potionDuration, int potionAmplifier) {
 
 		potions.add(potionId);
 		potionDurations.add(potionDuration * Const.TICKS_PER_SEC);
 		potionAmplifiers.add(potionAmplifier);
 
-		return this;// to chain together
+		//return this;// to chain together
 	}
 
 	@Override
@@ -133,5 +138,18 @@ public class ItemFoodAppleMagic extends ItemFood implements IHasRecipe {
 		apple_clownfish_enabled = config.getBoolean("AppleClownfish", 	category, true,"A magic apple that gives a new custom slowfall potion effect. (Works on any living entity)");
 		apple_chorus_enabled    = config.getBoolean("AppleChorus", 		category, true,"A magic apple that gives the levitation effect - just like shulkers. (Works on any living entity)");
  
+	}
+
+	private boolean isEnabled;
+	@Override
+	public void setEnabled(boolean e) {
+		isEnabled = e;
+	}
+
+	@Override
+	public void tryRegister(String name) {
+		if(this.isEnabled){
+			ModMain.itemRegistry.registerItem(this, name);
+		}
 	}
 }

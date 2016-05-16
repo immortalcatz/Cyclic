@@ -55,21 +55,22 @@ public class ModMain {
             return Items.diamond;//ItemRegistry.ModItems.chest_sack;
         }
     };
-    private EventRegistry events;
+    private static EventRegistry events;
+    public static ItemRegistry itemRegistry;
 
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent event) {
 
 		logger = new ModLogger(event.getModLog());
 		config = new Configuration(event.getSuggestedConfigurationFile());
+		network = NetworkRegistry.INSTANCE.newSimpleChannel(Const.MODID);
 		
 		events = new EventRegistry();
+		itemRegistry = new ItemRegistry();
 		
 		config.load();
 		syncConfig();
 
-		network = NetworkRegistry.INSTANCE.newSimpleChannel(Const.MODID);
-		
 		events.register();
 
 		ReflectionRegistry.register();
@@ -88,7 +89,7 @@ public class ModMain {
 	public void onInit(FMLInitializationEvent event) {
 
 		PotionRegistry.register();
-		ItemRegistry.register();
+		itemRegistry.register();
 		BlockRegistry.register();
 		SpellRegistry.register();
 		MobSpawningRegistry.register();
@@ -131,7 +132,7 @@ public class ModMain {
 		PotionRegistry.syncConfig(c);
 		events.syncConfig(c);
 		BlockRegistry.syncConfig(c);
-		ItemRegistry.syncConfig(c);
+		itemRegistry.syncConfig(c);
 		FuelRegistry.syncConfig(c);
 		MobSpawningRegistry.syncConfig(c);
 		RecipeAlterRegistry.syncConfig(c);

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lothrazar.cyclicmagic.ModMain;
 import com.lothrazar.cyclicmagic.item.ItemCyclicWand;
 import com.lothrazar.cyclicmagic.spell.ISpell;
 import com.lothrazar.cyclicmagic.spell.SpellInventory;
@@ -113,9 +114,9 @@ public class SpellRegistry {
 		
 		
 //TODO: a cleaner way?
-		((ItemCyclicWand)ItemRegistry.itemMap.get("cyclic_wand_fly")).setSpells(spellbookFly);
-		((ItemCyclicWand)ItemRegistry.itemMap.get("cyclic_wand_range")).setSpells(spellbookNoInvo);
-		((ItemCyclicWand)ItemRegistry.itemMap.get("cyclic_wand_build")).setSpells(spellbookBuild);
+		((ItemCyclicWand)ModMain.itemRegistry.itemMap.get("cyclic_wand_fly")).setSpells(spellbookFly);
+		((ItemCyclicWand)ModMain.itemRegistry.itemMap.get("cyclic_wand_range")).setSpells(spellbookNoInvo);
+		((ItemCyclicWand)ModMain.itemRegistry.itemMap.get("cyclic_wand_build")).setSpells(spellbookBuild);
 	 
 		// Spells.placefloor = new SpellPlaceFloor(++spellId, "placefloor");
 		// registerBuildSpell(Spells.placefloor);
