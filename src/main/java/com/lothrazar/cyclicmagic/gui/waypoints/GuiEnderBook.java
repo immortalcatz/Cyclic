@@ -23,15 +23,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiEnderBook extends GuiScreen {
 	private final EntityPlayer	entityPlayer;
-	private ItemStack						bookStack;
+
 	// public final ResourceLocation texture = new
 	// ResourceLocation(ModSamsContent.MODID,
 	// "textures/enderbook/textures/gui/book_ender.png" );
 	final int										maxNameLen	= 20;
 
-	public GuiEnderBook(EntityPlayer entityPlayer, ItemStack book) {
-		this.entityPlayer = entityPlayer;
-		bookStack = book;
+	public GuiEnderBook(EntityPlayer entityPlayer) {
+		this.entityPlayer = entityPlayer; 
 	}
 
 	public static int	buttonIdNew;
@@ -43,15 +42,11 @@ public class GuiEnderBook extends GuiScreen {
 	public void initGui() {
 		// great tips here
 		// http://www.minecraftforge.net/forum/index.php?topic=29945.0
-
-		if (bookStack.hasTagCompound() == false) {
-			bookStack.setTagCompound(new NBTTagCompound());
-		}
-
+ 
 		int buttonID = 0, w = 70, h = 20, ypad = 1, delete_w = 20, rowpad = 8;
 		buttonIdNew = buttonID;
 		buttonID++;
-		ArrayList<BookLocation> list = ItemEnderBook.getLocations(bookStack);
+		ArrayList<BookLocation> list = ItemEnderBook.getLocations(this.entityPlayer);
 
 		buttonNew = new ButtonWaypointNew(buttonIdNew, this.width / 2 - w,// x
 		    20,// y
@@ -59,7 +54,7 @@ public class GuiEnderBook extends GuiScreen {
 
 		buttonList.add(buttonNew);
 
-		if (bookStack != null && ItemEnderBook.getLocations(bookStack).size() >= ItemEnderBook.maximumSaved) {
+		if ( ItemEnderBook.getLocations(this.entityPlayer).size() >= ItemEnderBook.maximumSaved) {
 			buttonNew.enabled = false;// also a tooltip?
 		}
 

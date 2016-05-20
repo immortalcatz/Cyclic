@@ -46,15 +46,15 @@ public class ItemEnderBook extends BaseItem implements IHasRecipe, IHasConfig {
 		setCreativeTab(CreativeTabs.tabTransport);
 	}
 
-	public static ArrayList<BookLocation> getLocations(ItemStack itemStack) {
+	public static ArrayList<BookLocation> getLocations(EntityPlayer player) {
 		ArrayList<BookLocation> list = new ArrayList<BookLocation>();
 
 		String KEY;
-		int end = getLargestSlot(itemStack);
+		int end = getLargestSlot(player);
 		for (int i = 0; i <= end; i++) {
 			KEY = KEY_LOC + "_" + i;
 
-			String csv = UtilNBT.getTagCompoundNotNull(itemStack).getString(KEY);
+			String csv = UtilNBT.getPlayerString(player,KEY);
 
 			if (csv == null || csv.isEmpty()) {
 				continue;
@@ -66,18 +66,18 @@ public class ItemEnderBook extends BaseItem implements IHasRecipe, IHasConfig {
 		return list;
 	}
 
-	private static int getLocationsCount(ItemStack itemStack) {
-		return getLocations(itemStack).size();
+	private static int getLocationsCount(EntityPlayer player) {
+		return getLocations(player).size();
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		tooltip.add("" + getLocationsCount(stack));
+		tooltip.add("" + getLocationsCount(playerIn));
 	}
 
-	public static int getLargestSlot(ItemStack itemStack) {
-
-		return UtilNBT.getTagCompoundNotNull(itemStack).getInteger(KEY_LARGEST);
+	public static int getLargestSlot(EntityPlayer player) {
+ 
+		return UtilNBT.getPlayerInteger(player,KEY_LARGEST);
 	}
 
 	public static int getEmptySlotAndIncrement(ItemStack itemStack) {
@@ -202,7 +202,7 @@ public class ItemEnderBook extends BaseItem implements IHasRecipe, IHasConfig {
 			return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
 		}
 
-		Minecraft.getMinecraft().displayGuiScreen(new GuiEnderBook(entityPlayer, stack));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiEnderBook(entityPlayer));
 
 		return super.onItemRightClick(stack, world, entityPlayer, hand);
 	}

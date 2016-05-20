@@ -39,7 +39,18 @@ public class UtilNBT {
 		}
 		return p;
 	}
-
+	public static void setPlayerString(EntityPlayer player, String prop, String data) {
+		player.getEntityData().setString(prop, data);
+	}
+	public static void setPlayerInteger(EntityPlayer player, String prop, int data) {
+		player.getEntityData().setInteger(prop, data);
+	}
+	public static int getPlayerInteger(EntityPlayer player, String prop) {
+		return player.getEntityData().getInteger(prop);
+	}
+	public static String getPlayerString(EntityPlayer player, String prop) {
+		return player.getEntityData().getString(prop);
+	}
 	public static void incrementPlayerIntegerNBT(EntityPlayer player, String prop, int inc) {
 
 		int prev = player.getEntityData().getInteger(prop);

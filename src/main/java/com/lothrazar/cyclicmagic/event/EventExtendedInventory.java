@@ -9,6 +9,7 @@ import com.lothrazar.cyclicmagic.IHasConfig;
 import com.lothrazar.cyclicmagic.ModMain;
 import com.lothrazar.cyclicmagic.gui.player.ButtonTabToggleCrafting;
 import com.lothrazar.cyclicmagic.gui.player.ButtonTabToggleInventory;
+import com.lothrazar.cyclicmagic.gui.player.ButtonTabToggleWaypoints;
 import com.lothrazar.cyclicmagic.gui.player.GuiPlayerExtended;
 import com.lothrazar.cyclicmagic.gui.player.InventoryPlayerExtended;
 import com.lothrazar.cyclicmagic.util.Const;
@@ -151,8 +152,12 @@ public class EventExtendedInventory implements IHasConfig{
 				event.getButtonList().add(new ButtonTabToggleInventory(gui, x, y));
 			}
 			if(extendedCrafting){
-				event.getButtonList().add(new ButtonTabToggleCrafting(gui, x - 12, y));
+				x -= 12;
+				event.getButtonList().add(new ButtonTabToggleCrafting(gui, x, y));
 			}
+
+			x -= 12;
+			event.getButtonList().add(new ButtonTabToggleWaypoints(gui, x - 12, y));
 		}
 	}
 	
