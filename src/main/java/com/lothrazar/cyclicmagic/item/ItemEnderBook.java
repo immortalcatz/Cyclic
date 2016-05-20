@@ -80,52 +80,38 @@ public class ItemEnderBook extends BaseItem implements IHasRecipe, IHasConfig {
 		return UtilNBT.getPlayerInteger(player,KEY_LARGEST);
 	}
 
-	public static int getEmptySlotAndIncrement(ItemStack itemStack) {
-		int empty = UtilNBT.getTagCompoundNotNull(itemStack).getInteger(KEY_LARGEST);
+	public static int getEmptySlotAndIncrement(EntityPlayer player) {
+		int empty = UtilNBT.getPlayerInteger(player,KEY_LARGEST);
 
 		if (empty == 0) {
 			empty = 1;
 		} // first index is 1 not zero
 
-		UtilNBT.getTagCompoundNotNull(itemStack).setInteger(KEY_LARGEST, empty + 1);// save
-																					// the
-		// next empty
-		// one
+		UtilNBT.setPlayerInteger(player,KEY_LARGEST, empty + 1); 
+		
 		return empty;
 	}
-
-	private static ItemStack getPlayersBook(EntityPlayer player) {
-
-		ItemStack book = player.getHeldItem(EnumHand.MAIN_HAND);
-		if (book == null || book.getItem() instanceof ItemEnderBook == false) {
-			book = player.getHeldItem(EnumHand.OFF_HAND);
-		}
-
-		UtilNBT.getTagCompoundNotNull(book);
-		return book;
-	}
+ 
 
 	public static void deleteWaypoint(EntityPlayer player, int slot) {
-
-		ItemStack book = getPlayersBook(player);
-		book.getTagCompound().removeTag(KEY_LOC + "_" + slot);
+ 
+		UtilNBT.removePlayerTag(player, KEY_LOC + "_" + slot);
+		//book.getTagCompound().removeTag(KEY_LOC + "_" + slot);
 	}
 
 	public static void saveCurrentLocation(EntityPlayer player, String name) {
+ 
+		int id = getEmptySlotAndIncrement(player);
 
-		ItemStack book = getPlayersBook(player);
-
-		int id = getEmptySlotAndIncrement(book);// int slot =
-												// entityPlayer.inventory.currentItem
-												// + 1;
 
 		BookLocation loc = new BookLocation(id, player, name);
-
-		book.getTagCompound().setString(KEY_LOC + "_" + id, loc.toCSV());
+//System.out.println("save current location"+loc.toCSV());
+		UtilNBT.setPlayerString(player, KEY_LOC + "_" + id, loc.toCSV());
+		//book.getTagCompound().setString(KEY_LOC + "_" + id, loc.toCSV());
 	}
 
-	private static BookLocation getLocation(ItemStack stack, int slot) {
-		String csv = stack.getTagCompound().getString(ItemEnderBook.KEY_LOC + "_" + slot);
+	private static BookLocation getLocation(EntityPlayer player, int slot) {
+		String csv = UtilNBT.getPlayerString(player,ItemEnderBook.KEY_LOC + "_" + slot);
 
 		if (csv == null || csv.isEmpty()) {
 			return null;
@@ -134,18 +120,15 @@ public class ItemEnderBook extends BaseItem implements IHasRecipe, IHasConfig {
 		return new BookLocation(csv);
 	}
 
-	public static void teleport(EntityPlayer player, int slot)// ItemStack
-																// enderBookInstance
-	{
-		ItemStack book = getPlayersBook(player);
-
-		String csv = book.getTagCompound().getString(ItemEnderBook.KEY_LOC + "_" + slot);
+	public static void teleport(EntityPlayer player, int slot){ 
+		
+		String csv = UtilNBT.getPlayerString(player,ItemEnderBook.KEY_LOC + "_" + slot);
 
 		if (csv == null || csv.isEmpty()) {
 			return;
 		}
 
-		BookLocation loc = getLocation(book, slot);
+		BookLocation loc = getLocation(player, slot);
 		if (player.dimension != loc.dimension) {
 			return;
 		}

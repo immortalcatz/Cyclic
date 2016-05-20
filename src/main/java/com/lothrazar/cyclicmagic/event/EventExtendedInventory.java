@@ -15,6 +15,7 @@ import com.lothrazar.cyclicmagic.gui.player.InventoryPlayerExtended;
 import com.lothrazar.cyclicmagic.util.Const;
 import com.lothrazar.cyclicmagic.util.UtilPlayerInventoryFilestorage;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -157,7 +158,7 @@ public class EventExtendedInventory implements IHasConfig{
 			}
 
 			x -= 12;
-			event.getButtonList().add(new ButtonTabToggleWaypoints(gui, x - 12, y));
+			event.getButtonList().add(new ButtonTabToggleWaypoints( Minecraft.getMinecraft().thePlayer, x, y));
 		}
 	}
 	

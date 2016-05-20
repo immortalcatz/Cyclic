@@ -40,7 +40,10 @@ public class UtilNBT {
 		return p;
 	}
 	public static void setPlayerString(EntityPlayer player, String prop, String data) {
-		player.getEntityData().setString(prop, data);
+		player.getEntityData().setString(prop, data); 
+	}
+	public static void removePlayerTag(EntityPlayer player, String prop) {
+		player.getEntityData().removeTag(prop);
 	}
 	public static void setPlayerInteger(EntityPlayer player, String prop, int data) {
 		player.getEntityData().setInteger(prop, data);
