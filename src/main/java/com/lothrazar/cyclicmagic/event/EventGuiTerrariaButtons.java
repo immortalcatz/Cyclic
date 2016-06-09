@@ -9,12 +9,19 @@ import com.lothrazar.cyclicmagic.gui.button.ButtonTerrariaDepositAll;
 import com.lothrazar.cyclicmagic.gui.button.ButtonTerrariaLootAll;
 import com.lothrazar.cyclicmagic.gui.button.ButtonTerrariaQuickStack;
 import com.lothrazar.cyclicmagic.gui.button.ButtonTerrariaRestock;
-import com.lothrazar.cyclicmagic.gui.player.GuiPlayerExtended;  
+import com.lothrazar.cyclicmagic.gui.player.GuiPlayerExtended;
+import com.lothrazar.cyclicmagic.gui.wand.GuiWandInventory;
 import com.lothrazar.cyclicmagic.util.Const;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;  
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -136,4 +143,34 @@ public class EventGuiTerrariaButtons implements IHasConfig{
 			blacklistGuis = new ArrayList<String>();// just being extra safe
 		}
 	}
+	
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void drawEvent(GuiScreenEvent.DrawScreenEvent.Post event) {
+		if(event.getGui() instanceof GuiWandInventory) {
+			GuiWandInventory guiInv = (GuiWandInventory) event.getGui();
+			Container container = guiInv.inventorySlots;
+
+			int guiLeft = (guiInv.width - 176) / 2;
+			int guiTop = (guiInv.height - 166) / 2;
+
+			GlStateManager.color(1F, 1F, 1F);
+			GlStateManager.pushMatrix();
+			GlStateManager.disableDepth();
+			GlStateManager.disableLighting();
+			for(Slot s : container.inventorySlots) {
+//				ItemStack stack = s.getStack();
+				String test = (s==null||s.getStack()==null)?"null":s.getStack().getUnlocalizedName();
+			 System.out.println("wand inventory test "+test);
+ 			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Const.MODID,"textures/gui/slot_current.png"));
+				guiInv.drawTexturedModalRect(guiLeft + s.xDisplayPosition, guiTop + s.yDisplayPosition, 0, 0, 16, 16);
+				 
+				break;
+			}
+			GlStateManager.popMatrix();
+		}
+
+	}
+	
 }

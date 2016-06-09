@@ -56,7 +56,7 @@ public class SpellRangeBuild extends BaseSpellRange implements ISpellFromServer 
 
 		if (heldWand == null) { return; }
 
-		int itemSlot = InventoryWand.getSlotByBuildType(heldWand, world.getBlockState(posMouseover));
+		int itemSlot = InventoryWand.calculateSlotCurrent(heldWand, world.getBlockState(posMouseover));
 		IBlockState state = InventoryWand.getToPlaceFromSlot(heldWand, itemSlot);
 
 		if (state == null || state.getBlock() == null) { 

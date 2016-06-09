@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.lothrazar.cyclicmagic.IHasConfig;
 import com.lothrazar.cyclicmagic.IHasRecipe;
+import com.lothrazar.cyclicmagic.gui.wand.InventoryWand;
 import com.lothrazar.cyclicmagic.registry.SpellRegistry;
 import com.lothrazar.cyclicmagic.spell.BaseSpellRange;
 import com.lothrazar.cyclicmagic.spell.ISpell;
@@ -181,6 +182,7 @@ public class ItemCyclicWand extends Item implements IHasRecipe ,IHasConfig{
 		FIRST, ROTATE, RANDOM, MATCH;
 
 		private final static String NBT = "build";
+		private final static String NBT_SLOT = "buildslot";
 		private final static String NBTSIZE = "buildsize";
 
 		public static String getName(ItemStack wand) {
@@ -205,7 +207,6 @@ public class ItemCyclicWand extends Item implements IHasRecipe ,IHasConfig{
 		}
 
 		public static void toggle(ItemStack wand) {
-
 			NBTTagCompound tags = getNBT(wand);
 			int type = tags.getInteger(NBT);
 
@@ -218,9 +219,22 @@ public class ItemCyclicWand extends Item implements IHasRecipe ,IHasConfig{
 			tags.setInteger(NBT, type);
 			wand.setTagCompound(tags);
 		}
+		
+		public static int getSlot(ItemStack wand){
+			NBTTagCompound tags = getNBT(wand);
+			if(!tags.hasKey(NBT_SLOT)){
+				int def = InventoryWand.calculateSlotCurrent(wand, null);
+				tags.setInteger(NBT_SLOT,def);
+				return def;
+			}
+			return tags.getInteger(NBT_SLOT);
+		}
+		public static void setSlot(ItemStack wand,int s){
+			NBTTagCompound tags = getNBT(wand);
+			tags.setInteger(NBT_SLOT,s);
+		}
 
 		public static int getBuildSize(ItemStack wand) {
-
 			NBTTagCompound tags = getNBT(wand);
 			int s = tags.getInteger(NBTSIZE);
 
@@ -228,7 +242,6 @@ public class ItemCyclicWand extends Item implements IHasRecipe ,IHasConfig{
 		}
 
 		public static void setBuildSize(ItemStack wand, int size) {
-
 			NBTTagCompound tags = getNBT(wand);
 			tags.setInteger(NBTSIZE, size);
 			wand.setTagCompound(tags);

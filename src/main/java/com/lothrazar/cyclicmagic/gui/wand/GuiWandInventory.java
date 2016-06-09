@@ -3,6 +3,7 @@ package com.lothrazar.cyclicmagic.gui.wand;
 import org.lwjgl.opengl.GL11;
 
 import com.lothrazar.cyclicmagic.gui.button.ITooltipButton;
+import com.lothrazar.cyclicmagic.item.ItemCyclicWand;
 import com.lothrazar.cyclicmagic.util.Const;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -54,6 +55,10 @@ public class GuiWandInventory extends GuiContainer {
 //		if (size <= 0) {
 //			size = 1;
 //		}
+	}
+	
+	public int getBuildType(){
+		return ItemCyclicWand.BuildType.get(internalWand);
 	}
 
 	@Override

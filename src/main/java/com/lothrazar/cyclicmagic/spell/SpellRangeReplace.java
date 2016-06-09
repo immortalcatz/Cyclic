@@ -50,7 +50,7 @@ public class SpellRangeReplace extends BaseSpellRange {
 		//if (blockHere.getBlockHardness(stateHere, world, posMouseover) == -1) { 
 		if (stateHere.getBlockHardness(world, posMouseover) == -1) {  return;  }
 
-		int itemSlot = InventoryWand.getSlotByBuildType(heldWand, world.getBlockState(posMouseover));
+		int itemSlot = InventoryWand.calculateSlotCurrent(heldWand, world.getBlockState(posMouseover));
 		ItemStack[] invv = InventoryWand.readFromNBT(heldWand);
 		ItemStack toPlace = InventoryWand.getFromSlot(heldWand, itemSlot);
 

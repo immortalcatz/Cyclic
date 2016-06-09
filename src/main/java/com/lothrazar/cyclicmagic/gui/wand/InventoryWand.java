@@ -227,7 +227,7 @@ public class InventoryWand implements IInventory {
 		return null;
 	}
 
-	public static int getSlotByBuildType(ItemStack wand, IBlockState placeState) {
+	public static int calculateSlotCurrent(ItemStack wand, IBlockState matchState) {
 
 		int itemSlot = -1;
 
@@ -284,12 +284,12 @@ public class InventoryWand implements IInventory {
 			Random rand = new Random();
 			itemSlot = slotNonEmpty.get(rand.nextInt(slotNonEmpty.size()));
 		}
-		else if (buildType == ItemCyclicWand.BuildType.MATCH.ordinal() && placeState != null) {
+		else if (buildType == ItemCyclicWand.BuildType.MATCH.ordinal() && matchState != null) {
 
 			// damage dropped meaning what it really is , not item version
-			int meta = placeState.getBlock().damageDropped(placeState);
+			int meta = matchState.getBlock().damageDropped(matchState);
 
-			ItemStack compareStack = new ItemStack(placeState.getBlock(), 1, meta);
+			ItemStack compareStack = new ItemStack(matchState.getBlock(), 1, meta);
 			ItemStack curr;
 
 			// for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
