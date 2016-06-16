@@ -132,6 +132,7 @@ public class ClientProxy extends CommonProxy {
 
 		// Get the player and their held item
 
+		
 		RayTraceResult mouseOver = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(max, 1f);
 		// now get whatever block position we are mousing over if anything
 
