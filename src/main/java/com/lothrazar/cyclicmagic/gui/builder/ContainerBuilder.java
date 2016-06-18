@@ -1,7 +1,6 @@
 package com.lothrazar.cyclicmagic.gui.builder;
 
 import com.lothrazar.cyclicmagic.block.tileentity.TileEntityBuilder;
-import com.lothrazar.cyclicmagic.block.tileentity.TileEntityUncrafting;
 import com.lothrazar.cyclicmagic.gui.slot.SlotUncraft;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,23 +14,19 @@ public class ContainerBuilder extends Container {
 	
 	public static final int					SLOTX_START				= 10;
 	public static final int					SLOTY				= 28;
-	//public static final int					SLOT				= 0;
-	
+
 	public static final int					SQ	= 18;
-//	public static final int					SLOT_SECOND	= 1;
-//	public static final int					SLOT_THIRD	= 2;
-	protected TileEntityBuilder	tileEntity;
+	public TileEntityBuilder	tileEntity;
+	public int timer;
+	public int buildType;
 
 	public ContainerBuilder(InventoryPlayer inventoryPlayer, TileEntityBuilder te) {
 		tileEntity = te;
-
-		//addSlotToContainer(new SlotUncraft(tileEntity, SLOT, SLOTX, SLOTY));
-		//addSlotToContainer(new SlotUncraft(tileEntity, SLOT_SECOND, SLOTX, SLOTY + 18));
-		//addSlotToContainer(new SlotUncraft(tileEntity, SLOT_THIRD, SLOTX, SLOTY + 18 + 18));
-
+//		buildType = tileEntity.getBuildTypeEnum();
+//		System.out.println("container has "+buildType.name());
 		for(int i = 0; i < tileEntity.getSizeInventory(); i++){
 
-			addSlotToContainer(new SlotUncraft(tileEntity, i, SLOTX_START + i*SQ, SLOTY));
+			addSlotToContainer(new Slot(tileEntity, i, SLOTX_START + i*SQ, SLOTY));
 		}
 		// commonly used vanilla code that adds the player's inventory
 		bindPlayerInventory(inventoryPlayer);
@@ -86,5 +81,21 @@ public class ContainerBuilder extends Container {
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return true;
 	}
-
+	
+	
+	@Override
+    public void detectAndSendChanges(){
+        super.detectAndSendChanges();
+        //http://jabelarminecraft.blogspot.ca/p/minecraft-modding-containers.html
+        //this.tileEntity.getField(0);
+        /*
+        ticksGrindingItemSoFar = tileGrinder.getField(2);
+        timeCanGrind = tileGrinder.getField(0); 
+        ticksPerItem = tileGrinder.getField(3); 
+         * */
+        
+        timer = this.tileEntity.getField(TileEntityBuilder.FIELD_TIMER);
+        buildType = this.tileEntity.getField(TileEntityBuilder.FIELD_BUILDTYPE);
+        System.out.println("dsc:_"+timer+"__:"+buildType);
+    }
 }

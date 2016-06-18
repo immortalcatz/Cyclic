@@ -27,10 +27,10 @@ import net.minecraft.util.text.ITextComponent;
 public class TileEntityBuilder extends TileEntity implements IInventory, ITickable, ISidedInventory {
 
 	private ItemStack[] inv = new ItemStack[9];
-	private int	timer;
+	private int	buildTimer;
 	private int	shapeIndex = 0;
-//	private BuildType currentType;
 	private int currentType;
+	
 	private BlockPos nextPos;
 	private List<BlockPos> shape = new ArrayList<BlockPos>();
 	public static final int	TIMER_FULL = 100;
@@ -49,7 +49,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 	public TileEntityBuilder() {
 	}
 	
-	public void setBuildType(BuildType buildType) {
+	public void setShape(BuildType buildType) {
 		
 		//only rebuild shapes if they are different
 		if(this.currentType != buildType.ordinal()){
@@ -72,17 +72,11 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 			this.shapeIndex = 0;
 			this.nextPos = this.shape.get(shapeIndex);
 		}
-		this.currentType = buildType.ordinal();
+//		this.currentType = buildType.ordinal();
 	}
-	public int getBuildType(){
-		return this.currentType;
-	}
-	public BuildType getBuildTypeEnum(){
-		return BuildType.values()[this.currentType];
-	}
+
 	@Override
 	public boolean hasCustomName() {
-
 		return false;
 	}
 	
@@ -168,21 +162,36 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 		return Block.getBlockFromItem(stack.getItem()) != null;
 	}
 
+	public static final int FIELD_BUILDTYPE = 0;
+	public static final int FIELD_TIMER = 1;
 	@Override
 	public int getField(int id) {
-
+//http://jabelarminecraft.blogspot.ca/p/minecraft-modding-containers.html
+		switch(id){
+		case FIELD_BUILDTYPE:
+			return this.currentType;
+		case FIELD_TIMER:
+			return this.buildTimer;
+		}
 		return 0;
 	}
 
 	@Override
 	public void setField(int id, int value) {
-
+		switch(id){
+		case FIELD_BUILDTYPE:
+			this.currentType = value;
+		break;
+		case FIELD_TIMER:
+			this.buildTimer = value;
+		break;
+		}
 	}
 
 	@Override
 	public int getFieldCount() {
 
-		return 0;
+		return 2;
 	}
 
 	@Override
@@ -195,7 +204,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 
 		super.readFromNBT(tagCompound);
 
-		timer = tagCompound.getInteger(NBT_TIMER);
+		buildTimer = tagCompound.getInteger(NBT_TIMER);
 		shapeIndex = tagCompound.getInteger(NBT_SHAPEINDEX);
 		
 		nextPos = UtilNBT.stringCSVToBlockPos(tagCompound.getString(NBT_NEXTPOS));// = tagCompound.getInteger(NBT_TIMER);
@@ -237,7 +246,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 
-		tagCompound.setInteger(NBT_TIMER, timer);
+		tagCompound.setInteger(NBT_TIMER, buildTimer);
 		tagCompound.setInteger(NBT_SHAPEINDEX, this.shapeIndex);
 
 		if(nextPos == null || (nextPos.getX() == 0 && nextPos.getY()==0 && nextPos.getZ()==0)){
@@ -269,7 +278,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 		}
 		tagCompound.setTag(NBT_INV, itemList);
 		
-		tagCompound.setInteger(NBT_BUILDTYPE, this.getBuildType());
+		tagCompound.setInteger(NBT_BUILDTYPE, this.currentType);
 		
 		return super.writeToNBT(tagCompound);
 	}
@@ -295,13 +304,9 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 		super.onDataPacket(net, pkt);
 	}
 
-	public int getTimer() {
-		return timer;
-	}
 	public BlockPos getNextPos() {
 		return this.nextPos;
 	}
- 
  
 	private void shiftAllUp() {
 
@@ -322,7 +327,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 	}
 	
 	public boolean isBurning() {
-		return this.timer > 0 && this.timer < TIMER_FULL;
+		return this.buildTimer > 0 && this.buildTimer < TIMER_FULL;
 	}
 
 	@Override
@@ -339,6 +344,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 			//it works ONLY if its powered
 			return;
 		}
+//		System.out.println("update timer:"+buildTimer);
 
 		//??render
 		if(!this.worldObj.isRemote && this.nextPos != null && this.worldObj.rand.nextDouble() < 0.1 && 
@@ -354,14 +360,14 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 
 		ItemStack stack = getStackInSlot(0);
 		if (stack == null) {
-			timer = TIMER_FULL;// reset just like you would in a
+			buildTimer = TIMER_FULL;// reset just like you would in a
 			// furnace
 			return;
 		}
 
-		timer--;
-		if (timer <= 0) {
-			timer = TIMER_FULL;
+		buildTimer--;
+		if (buildTimer <= 0) {
+			buildTimer = TIMER_FULL;
 			trigger = true;
 		}
 
@@ -373,7 +379,7 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 
 				if(this.worldObj.isRemote == false){
 				
-					ModMain.logger.info("try place "+this.nextPos +" type "+this.getBuildTypeEnum().name());
+					ModMain.logger.info("try place "+this.nextPos);
 					
 					if(UtilPlaceBlocks.placeStateSafe(this.worldObj, null, this.nextPos, stuff.getStateFromMeta(stack.getMetadata()))){
 						this.decrStackSize(0, 1);
@@ -416,35 +422,12 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 			return;
 		}
 
-		switch(this.getBuildTypeEnum()){
-		case FACING:
-			// detect what direction my block faces)
-			EnumFacing facing = this.getCurrentFacing();
-			// not sure why this happens or if it ever will again, just being
-			// super safe to avoid null ptr -> ticking entity exception
-			
-
-			this.nextPos = this.nextPos.offset(facing);
-			
-			break;
-		case UP:
-			
-			this.nextPos = this.nextPos.up();
-			break;
-		case CIRCLE:
-		case SQUARE:
-			
-			int c = shapeIndex+1;
-			
-			if(c < 0 || c >= this.shape.size()) {c = 0;}
-			this.nextPos = this.shape.get(c);
-			
-			shapeIndex = c;
-			
-			break;
-		default:
-			break;
-		}
+		int c = shapeIndex+1;
+		
+		if(c < 0 || c >= this.shape.size()) {c = 0;}
+		this.nextPos = this.shape.get(c);
+		
+		shapeIndex = c;
 	}
 
 	private int[] hopperInput = { 0, 1, 2,3,4,5,6,7,8 };// all slots for all faces
@@ -486,7 +469,10 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 
 	public enum BuildType{
 		FACING,UP,SQUARE,CIRCLE;
-		
+
+		public static BuildType getNextType(int btype){
+			return getNextType(BuildType.values()[btype]);
+		}
 		public static BuildType getNextType(BuildType btype){
 			int type = btype.ordinal();
 			type++;
@@ -501,10 +487,11 @@ public class TileEntityBuilder extends TileEntity implements IInventory, ITickab
 //	@Override
 //    public boolean receiveClientEvent(int id, int type)
 //    {
-//		System.out.println("receiveClientEvent "+id +")"+ type);
-//		this.currentType = BuildType.values()[type];
+//		String test = BuildType.values()[type].name();
+//		System.out.println("receiveClientEvent "+test +")"+ type);
 //		
 //		
+//		this.currentType = type;
 //		
 //        return super.receiveClientEvent(id, type);
 //    }

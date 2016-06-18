@@ -16,12 +16,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ButtonBuilderType extends GuiButton implements ITooltipButton {
 
-	final TileEntityBuilder container;
+	final TileEntityBuilder tile;
 
 	public ButtonBuilderType(TileEntityBuilder current, int buttonId, int x, int y, int width) {
 
 		super(buttonId, x, y, width, 20, "");
-		container = current;
+		tile = current;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -34,20 +34,11 @@ public class ButtonBuilderType extends GuiButton implements ITooltipButton {
 
 
 			
-			ModMain.network.sendToServer(new PacketTileBuildType(container.getPos()));
-
-//			container.markDirty();
+			ModMain.network.sendToServer(new PacketTileBuildType(tile.getPos()));
+ 
 		}
 
 		return pressed;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-	this.displayString = I18n.format("builder.toggle.name");
-
-		super.drawButton(mc, mouseX, mouseY);
 	}
 
 	@Override

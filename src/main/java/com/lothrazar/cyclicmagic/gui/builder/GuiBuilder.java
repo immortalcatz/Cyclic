@@ -15,8 +15,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiBuilder extends GuiContainer {
 	private TileEntityBuilder tile;
 	private ButtonBuilderType btn;
+	private ContainerBuilder container;
 	public GuiBuilder(InventoryPlayer inventoryPlayer, TileEntityBuilder tileEntity) {
 		super(new ContainerBuilder(inventoryPlayer, tileEntity));
+		container = (ContainerBuilder)this.inventorySlots;
 		tile = tileEntity;
 	}
 
@@ -55,8 +57,7 @@ public class GuiBuilder extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 
 		//for some reason, tile is accurate but build type resets to zero everytime we save and reload the world
-//		System.out.println("drawGuiContainerBackgroundLayer :"+this.tile.getBuildType());
-//		System.out.println("drawGuiContainerBackgroundLayer tile.getTimer() :"+this.tile.getTimer());
+
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(table);
 		int thisX = (this.width - this.xSize) / 2;
@@ -73,10 +74,17 @@ public class GuiBuilder extends GuiContainer {
 			Gui.drawModalRectWithCustomSizedTexture(this.guiLeft + ContainerBuilder.SLOTX_START - 3 +k*Const.SQ, this.guiTop + ContainerBuilder.SLOTY - 1, u, v, Const.SQ, Const.SQ, Const.SQ, Const.SQ);	
 		}
 
-		if (tile.getTimer() > 0 && tile.getStackInSlot(0) != null) {
+		int timer = container.timer;
+		int buildType = container.buildType;
+
+        System.out.println("dsc:_"+timer+"__:"+buildType);
+		btn.displayString = tile.getField(TileEntityBuilder.FIELD_BUILDTYPE)+"";
+
+//		int timer = tile.getField(TileEntityBuilder.FIELD_TIMER);
+		if (timer > 0 && tile.getStackInSlot(0) != null) {
 			this.mc.getTextureManager().bindTexture(progress);
 
-			float percent = ((float) tile.getTimer()) / ((float) TileEntityBuilder.TIMER_FULL);
+			float percent = ((float) timer) / ((float) TileEntityBuilder.TIMER_FULL);
 			// maximum progress bar is 156, since the whole texture is 176 minus
 			// 10 padding on each side
 			int belowSlots = this.guiTop + 9 + 3 * Const.SQ;
